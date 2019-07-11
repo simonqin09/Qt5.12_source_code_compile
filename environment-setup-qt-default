@@ -1,0 +1,19 @@
+# Check for LD_LIBRARY_PATH being set, which can break SDK and generally is a bad practice
+# http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html#AEN80
+# http://xahlee.info/UnixResource_dir/_/ldpath.html
+# Only disable this check if you are absolutely know what you are doing!
+if [ ! -z "$LD_LIBRARY_PATH" ]; then
+    echo "Your environment is misconfigured, you probably need to 'unset LD_LIBRARY_PATH'"
+    echo "but please check why this was set in the first place and that it's safe to unset."
+    echo "The SDK will not operate correctly in most cases when LD_LIBRARY_PATH is set."
+    echo "For more references see:"
+    echo "  http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html#AEN80"
+    echo "  http://xahlee.info/UnixResource_dir/_/ldpath.html"
+    return 1
+fi
+export SDKTARGETSYSROOT=/usr/local/oecore-x86_64/sysroots/armv7at2hf-neon-angstrom-linux-gnueabi
+export PATH=/usr/local/oecore-x86_64/sysroots/x86_64-angstromsdk-linux/usr/bin:/usr/local/oecore-x86_64/sysroots/x86_64-angstromsdk-linux/usr/sbin:/usr/local/oecore-x86_64/sysroots/x86_64-angstromsdk-linux/bin:/usr/local/oecore-x86_64/sysroots/x86_64-angstromsdk-linux/sbin:/usr/local/oecore-x86_64/sysroots/x86_64-angstromsdk-linux/usr/bin/../x86_64-angstromsdk-linux/bin:/usr/local/oecore-x86_64/sysroots/x86_64-angstromsdk-linux/usr/bin/arm-angstrom-linux-gnueabi:/usr/local/oecore-x86_64/sysroots/x86_64-angstromsdk-linux/usr/bin/arm-angstrom-linux-musl:$PATH
+export PKG_CONFIG_LIBDIR=$SDKTARGETSYSROOT/usr/lib/pkgconfig:$SDKTARGETSYSROOT/usr/share/pkgconfig
+export PKG_CONFIG_SYSROOT_DIR=$SDKTARGETSYSROOT
+export ARCH=arm
+export CROSS_COMPILE=arm-angstrom-linux-gnueabi-
